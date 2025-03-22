@@ -1,104 +1,111 @@
 import java.util.ArrayList;
 
-abstract class Employee{
+abstract class Employee {
     private String Name;
     private int id;
 
-    public Employee(String name,int id){
-        this.Name=name;
-        this.id=id;
+    public Employee(String name, int id) {
+        this.Name = name;
+        this.id = id;
     }
-    public String getName(){
+
+    public String getName() {
         return Name;
     }
-    public int getId(){
+
+    public int getId() {
         return id;
     }
 
     public abstract double calculateSalary();
 
     @Override
-    public String toString(){
-        return "Employee[Name="+Name+", id="+id+", salary="+calculateSalary()+"]";
+    public String toString() {
+        return "Employee[Name=" + Name + ", id=" + id + ", salary=" + calculateSalary() + "]";
     }
 }
 
-class FullTimeEmployee extends Employee{
+class FullTimeEmployee extends Employee {
     private double monthlySalary;
 
-    public FullTimeEmployee(String Name, int id,double monthlySalary){
-        super(Name,id);
-        this.monthlySalary=monthlySalary;
+    public FullTimeEmployee(String Name, int id, double monthlySalary) {
+        super(Name, id);
+        this.monthlySalary = monthlySalary;
     }
-    public double calculateSalary(){
+
+    public double calculateSalary() {
         return monthlySalary;
     }
-
 }
-class PartTimeEmployee extends Employee{
-    private int hoursworked;
-    private int hourlyrate;
 
-    public PartTimeEmployee(String Name, int id, int hoursworked,int hourlyrate){
-        super(Name,id);
-        this.hoursworked=hoursworked;
-        this.hourlyrate=hourlyrate;
+class PartTimeEmployee extends Employee {
+    private double hoursWorked;  // Changed to double
+    private double hourlyRate;   // Changed to double
+
+    public PartTimeEmployee(String Name, int id, double hoursWorked, double hourlyRate) {
+        super(Name, id);
+        this.hoursWorked = hoursWorked;
+        this.hourlyRate = hourlyRate;
     }
 
     @Override
-    public double calculateSalary(){
-        return hoursworked * hourlyrate;
+    public double calculateSalary() {
+        return hoursWorked * hourlyRate;
     }
 }
 
-class PayrollSystem{
+class PayrollSystem {
     private ArrayList<Employee> employeeList;
 
-    public PayrollSystem(){
-        employeeList= new ArrayList<>();
+    public PayrollSystem() {
+        employeeList = new ArrayList<>();
     }
 
-    public void addEmployee(Employee employee){
+    public void addEmployee(Employee employee) {
         employeeList.add(employee);
     }
 
-    public void removeEmployee(int id){
+    public void removeEmployee(int id) {
         Employee employeeToRemove = null;
 
-        for(Employee employee : employeeList){
-            if(employee.getId()==id){
+        for (Employee employee : employeeList) {
+            if (employee.getId() == id) {
                 employeeToRemove = employee;
                 break;
             }
-            if(employeeToRemove !=null){
-                employeeList.remove(employeeToRemove);
-            }
+        }
+        
+        // Move the removal logic outside the loop
+        if (employeeToRemove != null) {
+            employeeList.remove(employeeToRemove);
+            System.out.println("Employee with ID " + id + " removed.");
+        } else {
+            System.out.println("Employee with ID " + id + " not found.");
         }
     }
 
-    public void displayEmployees(){
-        for(Employee employee : employeeList){
+    public void displayEmployees() {
+        for (Employee employee : employeeList) {
             System.out.println(employee);
         }
     }
 }
+
 public class Main {
     public static void main(String[] args) {
-
         PayrollSystem payrollSystem = new PayrollSystem();
-        FullTimeEmployee emp1 = new FullTimeEmployee("Parth",1,70000.0);
-        PartTimeEmployee emp2 = new PartTimeEmployee("Yash",2,40,100);
+        FullTimeEmployee emp1 = new FullTimeEmployee("Parth", 1, 70000.0);
+        PartTimeEmployee emp2 = new PartTimeEmployee("Yash", 2, 40, 100);
 
         payrollSystem.addEmployee(emp1);
         payrollSystem.addEmployee(emp2);
-        System.out.println("Initial Employee Details");
+        System.out.println("Initial Employee Details:");
         payrollSystem.displayEmployees();
 
-        System.out.println("Removing an employee");
+        System.out.println("Removing an employee...");
         payrollSystem.removeEmployee(2);
 
         System.out.println("Remaining Employees:");
         payrollSystem.displayEmployees();
-
     }
 }
